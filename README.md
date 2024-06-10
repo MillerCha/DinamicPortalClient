@@ -1,0 +1,2 @@
+# DinamicPortalClient
+Dinamic Portal Client
