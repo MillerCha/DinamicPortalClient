@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
@@ -7,15 +7,22 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Box from '@mui/material/Box';
 
-const RegistrationForm = () => {
+const RegistrationForm = ({courses, selctedCourse}) => {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
         email: '',
         phon:'',
-        selectedClass: ''
+        selectedClass:  selctedCourse ? courses.find(c=>c.id == selctedCourse.id ): null,
+        selectedGroup: null
     });
 
+   useEffect(()=>{
+    setFormData({
+        ...formData,
+        selectedGroup: null
+    });
+   },[formData.selectedClass])
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -88,18 +95,38 @@ const RegistrationForm = () => {
                     fullWidth
                     margin="normal"
                 />
+                
+
                 <FormControl fullWidth margin="normal">
-                    <InputLabel>חוג</InputLabel>
-                    <Select
-                        name="selectedClass"
-                        value={formData.selectedClass}
-                        onChange={handleInputChange}
-                    >
-                        <MenuItem value="Class A">Class A</MenuItem>
-                        <MenuItem value="Class B">Class B</MenuItem>
-                        <MenuItem value="Class C">Class C</MenuItem>
-                    </Select>
-                </FormControl>
+        <InputLabel>חוג</InputLabel>
+        <Select
+       name='selectedClass'
+       value={formData.selectedClass}
+      
+       onChange={handleInputChange}>
+          {courses.map((item) => (
+            <MenuItem key={item.id} value={item}>
+              {item.title}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      
+      {formData.selectedClass && formData.selectedClass.groups &&
+      formData.selectedClass.groups.length > 0 && (
+        <FormControl fullWidth margin="normal">
+          <InputLabel>קבוצה</InputLabel>
+          <Select 
+          name='selectedGroup'
+          value={formData.selectedGroup} onChange={(event) => handleInputChange(event)}>
+            {formData.selectedClass.groups.map((group) => (
+              <MenuItem key={group.id} value={group}>
+                {group.description}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
                 <Button variant="contained" color="primary" type="submit">
                     תשלום
                 </Button>

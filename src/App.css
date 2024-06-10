@@ -65,11 +65,3 @@
   
 }
 
-
-/*background*/
-
-.root {
-  background-image: url(./assets/wave.png);
-  background-repeat: no-repeat;
-  background-position: bottom;
-}
